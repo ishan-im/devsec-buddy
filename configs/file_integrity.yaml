@@ -1,0 +1,4 @@
+files:
+  - "/etc/passwd"
+  - "/etc/hosts"
+  - "README.md"
