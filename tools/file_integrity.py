@@ -10,12 +10,22 @@ CONFIG_PATH = Path("configs/file_integrity.yaml")
 REPORT_PATH = Path("reports/integrity_log.txt")
 HASH_STORE = Path("reports/file_hashes.json")
 
+LOG_FILE = "file_change.log"  # ✅ Define it at the module level
+
 def compute_hash(filepath):
     hasher = hashlib.sha256()
     with open(filepath, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hasher.update(chunk)
     return hasher.hexdigest()
+
+def log_change(message, old_hash, new_hash):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(LOG_FILE, "a") as f:
+        f.write(f"[{timestamp}] {message}\n")
+        f.write(f"    Old hash: {old_hash}\n")
+        f.write(f"    New hash: {new_hash}\n")
+
 
 
 def calculate_sha256(file_path: Path) -> str:
@@ -41,12 +51,7 @@ def save_hashes(hashes: dict):
         json.dump(hashes, f, indent=2)
 
 
-def log_change(message, old_hash, new_hash):
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(LOG_FILE, "a") as f:
-        f.write(f"[{timestamp}] {message}\n")
-        f.write(f"    Old hash: {old_hash}\n")
-        f.write(f"    New hash: {new_hash}\n")
+
 
 
 def run_integrity_check():
