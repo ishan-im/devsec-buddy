@@ -1,6 +1,5 @@
 import unittest
 import json
-import os
 from pathlib import Path
 from tools import port_scanner
 

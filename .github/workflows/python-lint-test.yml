@@ -1,4 +1,4 @@
-name: Python Lint & Test
+name: Python CI
 
 on:
   push:
@@ -18,18 +18,17 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.11'  # Match your local Python version
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install flake8 pytest
 
-    - name: Lint with flake8
+    - name: Lint with Ruff
       run: |
-        flake8 tools tests
+        ruff tools/ tests/ scheduler/
 
-    - name: Run unit tests
+    - name: Run tests with Pytest
       run: |
         pytest tests/
