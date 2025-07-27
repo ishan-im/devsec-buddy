@@ -1,42 +1,31 @@
-# tools/port_scanner.py
-
 import socket
 import yaml
-import json
-from datetime import datetime
-from pathlib import Path
+import os
 
-CONFIG_PATH = Path("configs/monitored_ports.yaml")
-REPORT_PATH = Path("reports/scan_results.json")
-
-
-def load_scan_config():
-    if not CONFIG_PATH.exists():
-        raise FileNotFoundError("Missing monitored_ports.yaml")
-    with open(CONFIG_PATH, "r") as f:
-        return yaml.safe_load(f)
-
-
-def is_port_open(ip, port, timeout=1):
-    try:
-        with socket.create_connection((ip, port), timeout=timeout):
-            return True
-    except (socket.timeout, ConnectionRefusedError, OSError):
-        return False
-
-
-def run_port_scan():
-    config = load_scan_config()
-    ip = config.get("target_ip", "127.0.0.1")
-    ports = config.get("ports", list(range(1, 1025)))
-
-    results = {"target": ip, "timestamp": datetime.now().isoformat(), "open_ports": []}
-
+def scan_ports(ip, ports):
+    open_ports = []
     for port in ports:
-        if is_port_open(ip, port):
-            results["open_ports"].append(port)
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(0.5)
+            result = sock.connect_ex((ip, port))
+            if result == 0:
+                open_ports.append(port)
+    return open_ports
 
-    with open(REPORT_PATH, "w") as f:
-        json.dump(results, f, indent=2)
+def main():
+    config_path = "port_scanner_config.yaml"
+    if not os.path.exists(config_path):
+        print(f"Config file {config_path} not found.")
+        return
 
-    print(f"[✓] Scan complete. Open ports: {results['open_ports']}")
+    with open(config_path, "r") as f:
+        config = yaml.safe_load(f)
+
+    ip = config["ip"]
+    ports = config["ports"]
+
+    open_ports = scan_ports(ip, ports)
+
+    with open("open_ports.txt", "w") as f:
+        for port in open_ports:
+            f.write(f"{port}\n")

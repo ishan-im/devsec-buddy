@@ -10,6 +10,13 @@ CONFIG_PATH = Path("configs/file_integrity.yaml")
 REPORT_PATH = Path("reports/integrity_log.txt")
 HASH_STORE = Path("reports/file_hashes.json")
 
+def compute_hash(filepath):
+    hasher = hashlib.sha256()
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
 
 def calculate_sha256(file_path: Path) -> str:
     sha256 = hashlib.sha256()
@@ -34,11 +41,12 @@ def save_hashes(hashes: dict):
         json.dump(hashes, f, indent=2)
 
 
-def log_change(file_path, old_hash, new_hash):
+def log_change(message, old_hash, new_hash):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(REPORT_PATH, "a") as log:
-        log.write(f"[{timestamp}] CHANGED: {file_path}\n")
-        log.write(f"  Old: {old_hash}\n  New: {new_hash}\n\n")
+    with open(LOG_FILE, "a") as f:
+        f.write(f"[{timestamp}] {message}\n")
+        f.write(f"    Old hash: {old_hash}\n")
+        f.write(f"    New hash: {new_hash}\n")
 
 
 def run_integrity_check():
