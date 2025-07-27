@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from tools import file_integrity
 
+
 class TestFileIntegrity(unittest.TestCase):
     def setUp(self):
         self.test_file = "test_sample.txt"
@@ -37,5 +38,6 @@ class TestFileIntegrity(unittest.TestCase):
             content = f.read()
             self.assertIn(message, content)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

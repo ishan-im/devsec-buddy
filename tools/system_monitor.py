@@ -15,14 +15,14 @@ def collect_system_metrics():
         "memory": {
             "total": psutil.virtual_memory().total,
             "available": psutil.virtual_memory().available,
-            "used_percent": psutil.virtual_memory().percent
+            "used_percent": psutil.virtual_memory().percent,
         },
         "disk": {
-            "total": psutil.disk_usage('/').total,
-            "used": psutil.disk_usage('/').used,
-            "free": psutil.disk_usage('/').free,
-            "used_percent": psutil.disk_usage('/').percent
-        }
+            "total": psutil.disk_usage("/").total,
+            "used": psutil.disk_usage("/").used,
+            "free": psutil.disk_usage("/").free,
+            "used_percent": psutil.disk_usage("/").percent,
+        },
     }
 
 

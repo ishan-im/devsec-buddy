@@ -14,6 +14,7 @@ from tools.system_monitor import monitor_system
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
+
 def schedule_jobs():
     scheduler = BackgroundScheduler()
 
@@ -23,7 +24,7 @@ def schedule_jobs():
         IntervalTrigger(minutes=30),
         name="Port Scan",
         id="port_scan",
-        replace_existing=True
+        replace_existing=True,
     )
 
     # File integrity check every 1 hour
@@ -32,7 +33,7 @@ def schedule_jobs():
         IntervalTrigger(hours=1),
         name="File Integrity Check",
         id="file_integrity",
-        replace_existing=True
+        replace_existing=True,
     )
 
     # Cron audit every 2 hours
@@ -41,7 +42,7 @@ def schedule_jobs():
         IntervalTrigger(hours=2),
         name="Cron Auditor",
         id="cron_audit",
-        replace_existing=True
+        replace_existing=True,
     )
 
     # System monitor every 5 minutes
@@ -50,7 +51,7 @@ def schedule_jobs():
         IntervalTrigger(minutes=5),
         name="System Monitor",
         id="system_monitor",
-        replace_existing=True
+        replace_existing=True,
     )
 
     scheduler.start()
@@ -62,4 +63,3 @@ def schedule_jobs():
     except (KeyboardInterrupt, SystemExit):
         scheduler.shutdown()
         logging.info("Scheduler stopped.")
-

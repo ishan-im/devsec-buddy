@@ -12,7 +12,9 @@ def get_cron_jobs(user=None):
     """
     try:
         if user:
-            result = subprocess.run(["crontab", "-l", "-u", user], capture_output=True, text=True)
+            result = subprocess.run(
+                ["crontab", "-l", "-u", user], capture_output=True, text=True
+            )
         else:
             result = subprocess.run(["crontab", "-l"], capture_output=True, text=True)
 
@@ -21,7 +23,8 @@ def get_cron_jobs(user=None):
 
         # Filter out comments and empty lines
         cron_jobs = [
-            line for line in result.stdout.splitlines()
+            line
+            for line in result.stdout.splitlines()
             if line.strip() and not line.strip().startswith("#")
         ]
         return cron_jobs

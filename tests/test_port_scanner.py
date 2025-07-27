@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from tools import port_scanner
 
+
 class TestPortScanner(unittest.TestCase):
     def setUp(self):
         self.output_file = Path("reports/scan_results.json")
@@ -32,5 +33,6 @@ class TestPortScanner(unittest.TestCase):
             for port, status in data.items():
                 self.assertIn(status, ["open", "closed"])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

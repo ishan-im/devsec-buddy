@@ -30,11 +30,7 @@ def run_port_scan():
     ip = config.get("target_ip", "127.0.0.1")
     ports = config.get("ports", list(range(1, 1025)))
 
-    results = {
-        "target": ip,
-        "timestamp": datetime.now().isoformat(),
-        "open_ports": []
-    }
+    results = {"target": ip, "timestamp": datetime.now().isoformat(), "open_ports": []}
 
     for port in ports:
         if is_port_open(ip, port):
