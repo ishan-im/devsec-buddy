@@ -18,7 +18,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'  # Match your local Python version
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
@@ -27,7 +27,7 @@ jobs:
 
     - name: Lint with Ruff
       run: |
-        ruff tools/ tests/ scheduler/
+        ruff check tools/ tests/ scheduler/
 
     - name: Run tests with Pytest
       run: |
